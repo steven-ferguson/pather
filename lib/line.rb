@@ -1,22 +1,34 @@
 class Line
-  attr_reader :text
-
   def initialize(text)
-    @characters = text.split('')
+    @text = text
   end
 
-  def transform
-    key_character_count = 0
+  def to_s
+    @text
+  end
 
-    @characters.map do |character|
-      if character == '#'
-        key_character_count += 1
-        character
-      elsif key_character_count == 1
-        '*'
-      else
-        character
-      end
-    end.join('')
+  def has_waypoint?
+    !waypoint_index.nil?
+  end
+
+  def waypoint_index
+    @text.index(waypoint_marker)
+  end
+
+  def mark_path(index, ending_index=nil)
+    if ending_index.nil?
+      @text[index] = path_marker
+    else
+      length = ending_index - index + 1
+      @text[index..ending_index] = path_marker * length
+    end
+  end
+
+  def path_marker
+    '*'
+  end
+
+  def waypoint_marker
+    '#'
   end
 end
