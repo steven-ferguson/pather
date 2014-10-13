@@ -3,24 +3,27 @@ class Line
     @text = text
   end
 
+  def has_two_waypoints?
+    first_waypoint_index != last_waypoint_index
+  end
+
   def to_s
     @text
   end
 
-  def has_waypoint?
-    !waypoint_index.nil?
-  end
-
-  def waypoint_index
+  def first_waypoint_index
     @text.index(waypoint_marker)
   end
 
+  def last_waypoint_index
+    @text.rindex(waypoint_marker)
+  end
+
   def mark_path(index, ending_index=nil)
-    if ending_index.nil?
-      @text[index] = path_marker
-    else
-      length = ending_index - index + 1
-      @text[index..ending_index] = path_marker * length
+    ending_index ||= index
+
+    (index..ending_index).each do |i|
+      mark_character(i)
     end
   end
 
@@ -30,5 +33,12 @@ class Line
 
   def waypoint_marker
     '#'
+  end
+
+  private
+  def mark_character(index)
+    if @text[index] != waypoint_marker
+      @text[index] = path_marker
+    end
   end
 end

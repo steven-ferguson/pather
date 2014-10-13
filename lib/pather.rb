@@ -11,48 +11,49 @@ class Pather
 
   def process
     File.foreach("@input_file_path") do |text|
-      process_line(text)
+      line = Line.new(line)
+      process_line(line)
     end
   end
 
   def process_line(line)
-    new_line = Line.new(line)
+    locate_waypoints(line)
+    build_path(line)
+    line.to_s
+  end
 
-    if searching_for_start?
-      if new_line.has_waypoint?
-        set_starting_waypoint(new_line.waypoint_index)
-      end
-
-      return new_line.to_s
+  def locate_waypoints(line)
+    if line.has_two_waypoints?
+      set_starting_waypoint(line.first_waypoint_index)
+      set_ending_waypoint(line.last_waypoint_index)
+    else
+      set_waypoint(line.first_waypoint_index)
     end
+  end
 
-    if building_path?
-      if new_line.has_waypoint?
-        set_ending_waypoint(new_line.waypoint_index)
-        new_line.mark_path(starting_waypoint_index, ending_waypoint_index - 1)
-      else
-        new_line.mark_path(starting_waypoint_index)
-      end
+  def build_path(line)
+    if building_path?(line)
+      line.mark_path(starting_waypoint_index, ending_waypoint_index)
+    end
+  end
 
-      return new_line.to_s
+  def set_waypoint(index)
+    if starting_waypoint_index
+      set_ending_waypoint(index)
+    else
+      set_starting_waypoint(index)
     end
   end
 
   def set_starting_waypoint(index)
     @starting_waypoint_index = index
-    @state = :building_path
   end
 
   def set_ending_waypoint(index)
-    @ending_waypoint_index = index
-    @state = :path_complete
+    @ending_waypoint_index ||= index
   end
 
-  def searching_for_start?
-    @state == :searching_for_start
-  end
-
-  def building_path?
-    @state == :building_path
+  def building_path?(line)
+    starting_waypoint_index  && (ending_waypoint_index.nil? || line.last_waypoint_index == ending_waypoint_index)
   end
 end
