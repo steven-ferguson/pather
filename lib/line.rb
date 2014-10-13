@@ -21,8 +21,10 @@ class Line
 
   def mark_path(index, ending_index=nil)
     ending_index ||= index
+    first = [index, ending_index].min
+    last = [index, ending_index].max
 
-    (index..ending_index).each do |i|
+    (first..last).each do |i|
       mark_character(i)
     end
   end

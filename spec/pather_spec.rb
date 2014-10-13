@@ -1,29 +1,17 @@
 require 'rspec'
-require 'byebug'
 require 'pather'
 
 describe Pather do
-  # describe '#process' do
-  #   it "writes a file that connects the # with asterisks" do
-  #     expected_output = File.read('./spec/single_line_expected.txt')
+  describe '#process' do
+    it "writes a file that connects the # with asterisks" do
+      expected_output = File.read('./spec/expected_output.txt')
 
-  #     Pather.new(input_filename: 'single_line_fixture.txt', output_filename: 'result.txt').process
+      Pather.new(input_filename: 'spec/fixture.txt', output_filename: 'spec/result.txt').process
 
-  #     actual_output = File.read('./spec/result.txt')
-  #     expect(actual_output).to eq expected_output
-  #   end
-
-  #   context "when the # are on different lines" do
-  #     it "connects the # with asteriks" do
-  #       expected_output = File.read('./spec/vertical_expected.txt')
-
-  #       Pather.new(input_filename: 'vertical_fixture.txt', output_filename: 'result.txt').process
-
-  #       actual_output = File.read('./spec/result.txt')
-  #       expect(actual_output).to eq expected_output
-  #     end
-  #   end
-  # end
+      actual_output = File.read('./spec/result.txt')
+      expect(actual_output).to eq expected_output
+    end
+  end
 
   describe '#process_line' do
     context 'when the starting waypoint has not been found' do
@@ -50,7 +38,7 @@ describe Pather do
     end
 
     context 'when the line is between the waypoints' do
-      it 'changes the character at index of the starting waypoint to an asterisk' do
+      it 'changes the character at index of the starting waypoint to *' do
         line = Line.new("....")
         pather = Pather.new(input_filename: 'test', output_filename: 'test')
         pather.set_starting_waypoint(1)
@@ -62,7 +50,7 @@ describe Pather do
     end
 
     context 'when the line has the ending waypoint' do
-      it 'marks the path between the starting waypoint index and ending waypoint with asterisks' do
+      it 'marks the path between the starting waypoint index and ending waypoint with *s' do
         line = Line.new("...#.")
         pather = Pather.new(input_filename: 'test', output_filename: 'test')
         pather.set_starting_waypoint(1)

@@ -1,18 +1,19 @@
-require 'line'
+require './lib/line'
 
 class Pather
-  attr_reader :state, :starting_waypoint_index, :ending_waypoint_index
+  attr_reader :starting_waypoint_index, :ending_waypoint_index
 
   def initialize(input_filename:, output_filename:)
-    @input_file_path = "./spec/#{input_filename}"
-    @output_file_path = "./spec/#{output_filename}"
-    @state = :searching_for_start
+    @input_file_path = "./#{input_filename}"
+    @output_file_path = "./#{output_filename}"
   end
 
   def process
-    File.foreach("@input_file_path") do |text|
-      line = Line.new(line)
-      process_line(line)
+    File.open(@output_file_path, 'w') do |output_file|
+      File.foreach(@input_file_path) do |text|
+        line = Line.new(text)
+        output_file.write(process_line(line))
+      end
     end
   end
 
@@ -54,6 +55,6 @@ class Pather
   end
 
   def building_path?(line)
-    starting_waypoint_index  && (ending_waypoint_index.nil? || line.last_waypoint_index == ending_waypoint_index)
+    starting_waypoint_index && (ending_waypoint_index.nil? || line.last_waypoint_index == ending_waypoint_index)
   end
 end

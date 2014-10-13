@@ -1,4 +1,5 @@
 #!/usr/bin/env ruby 
+require './lib/pather.rb'
 
-Pather.new(input_file: ARGV[0], output_file: ARGV[1]).process
+Pather.new(input_filename: ARGV[0], output_filename: ARGV[1]).process
 
